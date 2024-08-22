@@ -1,0 +1,79 @@
+{% extends "home.html" }
+
+{% block content %}
+
+<div class="cards">
+    <div class="container">
+
+        {% if chosen == 'rpg'}
+        <h1 class="page-title d-none d-lg-block">Popular RPG's</h1>
+        {% elif nine_month %}
+
+        <h1 class="page-title d-none d-lg-block">Upcoming RPG's</h1>
+        {% elif one_month %} 
+
+        <h1 class="page-title d-none d-lg-block">New Games!</h1>
+        {%else%}
+        
+        <h1 class="page-title d-none d-lg-block">Top {{chosen}} Games!</h1>
+        {% endif %}
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+            {% for games in results %}
+            <div class="card-column col-md-3">
+                <div class="card">
+
+                    {% if title.get('background_image') %}
+                    <div class="image">
+                        <img src="{{game['background_image']}}" width="100%" height="150px">
+                    </div>
+
+                    {% else % }
+
+                    <div class="image">
+                        <img src="/static/no-image.png" width="100%" height="150px">
+                    </div>
+
+                    {% endif % }
+
+                    <div class="main-text">
+                        <a href="/games/{{games['id']}}" class="card-game-name">{{game['name']}}</a>
+                        <div class="bottom-text d-none d-xl-block">
+                            {% if game.get('type') %}
+                            type
+                            {% for type in game['type'][:3] %}
+
+                            <a href="/type/{{type['chosen']}}" class="card-game-genre">{{type['name']}}</a>
+                            {% endfor %}
+                            {% endif %}
+
+                            <div class="break"></div>
+
+                            {%if game.get('consoles')%}
+                            Consoles:
+                            {%for console in title ['consoles'] [:3]}
+
+                            {% if console['console']['name'] == 'Xbox Series X/S' %}
+                            <a href="/consoles/{{console['console']}}" class="card-game-platform">{{console['console']['name']}}</a>
+
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if session['previous_page'] %}
+        <a href="/titles/previous_page" class="pag-button btn btn-lg active" role="button" aria-pressed="true">Previous</a>
+
+        {% endif %}
+        {% if session['next_page'] %}
+
+        <a href="/titles/next_page" class="pag-button btn btn-lg active" role="button" aria-pressed="true">Next</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
